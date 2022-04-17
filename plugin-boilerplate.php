@@ -13,58 +13,66 @@
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-//Define Dirpath for hooks
-define( 'DIR_PATH', plugin_dir_path( __FILE__ ) );
 
-if (!class_exists('PluginBoilerplate')) {
-    class PluginBoilerplate
-    {
+//Define dirpath
+define( 'FA_PLUGIN_BOILERPLATE_DIR', plugin_dir_path( __FILE__ ) );
+
+if (!class_exists('FA_Plugin_Boilerplate')) {
+    class FA_Plugin_Boilerplate {
         /**
-         * PluginBoilerplate constructor.
+         * Plugin version.
+         *
+         * @var string
          */
-        public function __construct()
-        {
-            //Hook into the plugin activation hook
+        const VERSION = '1.0.0';
+
+        /**
+         * Instance of this class.
+         *
+         * @var object
+         */
+        protected static $instance = null;
+
+        /**
+         * Initialize the plugin.
+         */
+        private function __construct() {
+            // Load plugin text domain
+            add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
             register_activation_hook( __FILE__, array( $this, 'activate' ) );
-            //Hook into the plugin deactivation hook
-            register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-            //Hook into the plugin uninstall hook
-            register_uninstall_hook( __FILE__, array( $this, 'uninstall' ) );
-            //Hook into the WordPress init action
-            add_action( 'init', array( $this, 'init' ) );
+            register_deactivation_hook(__FILE__, array( $this, 'deactivate' )  );
         }
 
         /**
-         * Activate the plugin
+         * Return an instance of this class.
+         *
+         * @return object A single instance of this class.
          */
-        public function activate()
-        {
-            // Do nothing
+        public static function get_instance() {
+            // If the single instance hasn't been set, set it now.
+            if ( null == self::$instance ) {
+                self::$instance = new self;
+            }
+
+            return self::$instance;
         }
 
         /**
-         * Deactivate the plugin
+         * Load the plugin text domain for translation.
          */
-        public function deactivate()
-        {
-            // Do nothing
+        public function load_plugin_textdomain() {
+            load_plugin_textdomain( 'fa-plugin-boilerplate', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
         }
 
-        /**
-         * Uninstall the plugin
-         */
-        public function uninstall()
-        {
-            // Do nothing
+        public function activate() {
+            // Do something
         }
 
-        /**
-         * Initialize the plugin
-         */
-        public function init()
-        {
-            // Do nothing
+        public function deactivate() {
+            // Do something
         }
+
     }
+
+    FA_Plugin_Boilerplate::get_instance();
 }
-new PluginBoilerplate();
