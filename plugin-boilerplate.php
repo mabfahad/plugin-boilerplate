@@ -65,7 +65,7 @@ if (!class_exists('FA_Plugin_Boilerplate')) {
         }
 
         public function activate() {
-            // Do something
+            // Do something on plugin activation
         }
 
         public function deactivate() {
