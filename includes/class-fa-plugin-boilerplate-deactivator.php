@@ -48,6 +48,7 @@ class Fa_Plugin_Boilerplate_Deactivator {
      */
     private function deactivate() {
         $this->delete_plugin_tables(['fa_plugin_boilerplate']);
+        $this->deletePages(['plugin-page']);
     }
 
     private function delete_plugin_tables($table_names = null) {
@@ -56,6 +57,16 @@ class Fa_Plugin_Boilerplate_Deactivator {
         if (is_array($table_names) && !empty($table_names)) {
             foreach ($table_names as $table_name) {
                 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}{$table_name}");
+            }
+        }
+    }
+
+    private function deletePages($pages = null) {
+        //delete plugin pages
+        if (is_array($pages) && !empty($pages)) {
+            foreach ($pages as $page) {
+                $post = get_page_by_path($page);
+                wp_delete_post($post->ID, true);
             }
         }
     }
