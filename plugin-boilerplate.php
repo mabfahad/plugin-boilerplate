@@ -73,6 +73,8 @@ if (!class_exists('FA_Plugin_Boilerplate')) {
 
         public function deactivate() {
             // Do something
+            require_once FA_PLUGIN_BOILERPLATE_DIR . 'includes/class-fa-plugin-boilerplate-deactivator.php';
+            FA_Plugin_Boilerplate_Deactivator::get_instance();
         }
 
     }
