@@ -66,6 +66,9 @@ if (!class_exists('FA_Plugin_Boilerplate')) {
 
         public function activate() {
             // Do something on plugin activation
+            require_once FA_PLUGIN_BOILERPLATE_DIR . 'includes/class-fa-plugin-boilerplate-activator.php';
+            FA_Plugin_Boilerplate_Activator::get_instance();
+
         }
 
         public function deactivate() {
