@@ -52,6 +52,7 @@ class FA_Plugin_Boilerplate_Activator
     private function activate() {
         $this->create_plugin_options();
         $this->create_plugin_tables();
+        $this->createPages(['title'=>'Plugin Page','slug'=>'plugin-page','template'=>'plugin-page']);
     }
 
 
@@ -74,5 +75,28 @@ class FA_Plugin_Boilerplate_Activator
         ) $charset_collate;";
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
+    }
+
+    private function createPages($data) {
+        //create_pages
+        $post_id = -1;
+        $slug = $data['slug'];
+        $title = $data['title'];
+        if ( null == get_page_by_title( $title )) {
+            $uploader_page = array(
+                'comment_status'        => 'closed',
+                'ping_status'           => 'closed',
+                'post_name'             => $slug,
+                'post_title'            => $title,
+                'post_status'           => 'publish',
+                'post_type'             => 'page'
+            );
+            $post_id = wp_insert_post( $uploader_page );
+            if ( !$post_id ) {
+                wp_die( 'Error creating template page' );
+            } else {
+                update_post_meta( $post_id, '_wp_page_template', $data['template'].'.php' );
+            }
+        }
     }
 }

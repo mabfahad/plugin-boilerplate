@@ -41,6 +41,7 @@ if (!class_exists('FA_Plugin_Boilerplate')) {
             add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
             register_activation_hook( __FILE__, array( $this, 'activate' ) );
             register_deactivation_hook(__FILE__, array( $this, 'deactivate' )  );
+            add_action('template_include', array($this, 'template_including'));
         }
 
         /**
@@ -75,6 +76,13 @@ if (!class_exists('FA_Plugin_Boilerplate')) {
             // Do something
             require_once FA_PLUGIN_BOILERPLATE_DIR . 'includes/class-fa-plugin-boilerplate-deactivator.php';
             FA_Plugin_Boilerplate_Deactivator::get_instance();
+        }
+
+        public function template_including($template) {
+            if (is_page_template('plugin-page.php')) {
+                $template = FA_PLUGIN_BOILERPLATE_DIR . 'public/templates/plugin-page.php';
+            }
+            return $template;
         }
 
     }
